@@ -19,7 +19,7 @@ const RecipeSchema = new Schema({
         type:String,
         required:true
     },
-    creatdDate:{
+    createDate:{
         type:Date,
         default: Date.now
     },
