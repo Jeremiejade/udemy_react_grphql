@@ -11,9 +11,30 @@ exports.resolvers ={
 
     Query:{
         getAllRecipes: async (root, args, {Recipe})=>{
-            const allRecipes = await Recipe.find()
+            const allRecipes = await Recipe.find().sort({createDate: "desc"})
             return allRecipes;
         },
+        getRecipe:async(root, { _id }, {Recipe}) => {
+            const recipe = await Recipe.findOne({_id});
+            return recipe;
+        },
+        searchRecipes: async (root,{ searchTerm }, {Recipe})=>{
+            if(searchTerm){
+                const searchResults = await Recipe.find({
+                    $text: {$search: searchTerm}
+                },{
+                    score: {$meta: "textScore"}
+                }).sort({
+
+                    score: {$meta: "textScore"}
+                });
+                return searchResults
+            }else{
+                const recipes = await Recipe.find().sort({likes: "desc", createDate: "desc"});
+                return recipes
+            }
+        },
+
         getCurrentUser: async (root, args, {currentUser, User}) =>{
             if(!currentUser){
                 return null;

@@ -23,6 +23,8 @@ type User {
 type Query {
 
     getAllRecipes: [Recipe]
+    getRecipe(_id: ID!): Recipe
+    searchRecipes(searchTerm: String): [Recipe]
 
     getCurrentUser: User
 }
